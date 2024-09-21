@@ -3,9 +3,9 @@ This is the web dev task given by byte for recruitment process.
 
 I have done the following tasks : 
     1) cyber security task (flag captured)                            
-    2) ml task             
+    2) ml task both            
     3) iot task 1           
-    4) web dev task             
+    4) web dev task (both)                  
 
 the link to the google drive i have submitted in the submission form.
 and i am giving it here also 
