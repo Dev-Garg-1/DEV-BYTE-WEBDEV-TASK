@@ -16,27 +16,27 @@ app.get('/auth', (req, res) => {
   res.redirect(`https://github.com/login/oauth/authorize?client_id=${process.env.CLIENT_ID}`)
 })
 
-app.get('/oauth-callback', ({query:{code}}, res) => {
+app.get('/oauth-callback', async ({ query: { code } }, res) => {
   const body = {
-    client_id:process.env.CLIENT_ID,
-    client_secret:process.env.CLIENT_SECRET,
-    code
+      client_id: process.env.CLIENT_ID,
+      client_secret: process.env.CLIENT_SECRET,
+      code,
+  };
+
+  const opts = { headers: { accept: 'application/json' } };
+
+  try {
+      const response = await axios.post('https://github.com/login/oauth/access_token', body, opts);
+      const token = response.data.access_token; // Make sure to define 'token' here
+
+      console.log('My token:', token);
+      res.redirect(`/?token=${token}`);
+  } catch (err) {
+      console.error('Error getting token:', err.message);
+      res.status(500).send('Internal Server Error');
   }
+});
 
-  const opts = {headers:{accept:'application/json'}}
-
-  axios
-  .post('https://github.com/login/oauth/access_token', body, opts)
-  .then((_res) => _res.data.access_token)
-  .then((token) => {
-    console.log('My token:', token)
-    res.redirect(`/?token=${token}`)
-  })
-  .catch((err) => res.status(500).json({err: err.message}))
-
-  // Redirect with the token
-  res.redirect(`/?token=${token}`); // This should redirect to the main page
-})
 
 
 
