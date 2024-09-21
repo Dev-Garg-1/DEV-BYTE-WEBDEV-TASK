@@ -33,6 +33,9 @@ app.get('/oauth-callback', ({query:{code}}, res) => {
     res.redirect(`/?token=${token}`)
   })
   .catch((err) => res.status(500).json({err: err.message}))
+
+  // Redirect with the token
+  res.redirect(`/?token=${token}`); // This should redirect to the main page
 })
 
 
