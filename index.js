@@ -31,7 +31,7 @@ app.get('/oauth-callback', async ({ query: { code } }, res) => {
 
       if (token) {
           // res.json({ token });  Send back the token in a JSON response
-        res.redirect(`/?token=${token}`)
+        //res.redirect(`/?token=${token}`)
       } else {
           res.status(400).json({ error: 'No token received' });
       }
