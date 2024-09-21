@@ -23,8 +23,30 @@ const checkFollowing = async (token) => {
 };
 
 
-if(TOKEN) {
+if (TOKEN) {
     hide('.content.unauthorized');
     show('.content.authorized');
     checkFollowing(TOKEN);
+} else {
+    // When the token is not directly in the URL, you can handle the callback
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    
+    if (code) {
+        // Fetch the token from your backend
+        fetch(`/oauth-callback?code=${code}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.token) {
+                    hide('.content.unauthorized');
+                    show('.content.authorized');
+                    checkFollowing(data.token);
+                } else {
+                    console.error('No token received');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
 }

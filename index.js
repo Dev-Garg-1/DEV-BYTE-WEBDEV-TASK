@@ -27,15 +27,19 @@ app.get('/oauth-callback', async ({ query: { code } }, res) => {
 
   try {
       const response = await axios.post('https://github.com/login/oauth/access_token', body, opts);
-      const token = response.data.access_token; // Make sure to define 'token' here
+      const token = response.data.access_token;
 
-      console.log('My token:', token);
-      res.redirect(`/?token=${token}`);
+      if (token) {
+          res.json({ token }); // Send back the token in a JSON response
+      } else {
+          res.status(400).json({ error: 'No token received' });
+      }
   } catch (err) {
       console.error('Error getting token:', err.message);
       res.status(500).send('Internal Server Error');
   }
 });
+
 
 
 
