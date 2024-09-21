@@ -28,14 +28,17 @@ if (TOKEN) {
     show('.content.authorized');
     checkFollowing(TOKEN);
 } else {
-    // When the token is not directly in the URL, you can handle the callback
+    // Handle the OAuth flow by checking the code
     const params = new URLSearchParams(window.location.search);
     const code = params.get('code');
     
     if (code) {
         // Fetch the token from your backend
         fetch(`/oauth-callback?code=${code}`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.json();
+            })
             .then(data => {
                 if (data.token) {
                     hide('.content.unauthorized');
